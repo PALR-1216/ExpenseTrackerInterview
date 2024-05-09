@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "expensetrackerinterview": {
+      "hosting": {
+        "expensetrackerinterview": [
+          "expensetrackerinterview"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "expensetrackerinterview"
+  }
+}

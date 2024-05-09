@@ -1,0 +1,65 @@
+
+<app-navbar></app-navbar>
+
+
+<div class="flex min-h-screen flex-col justify-center bg-gray-100 py-12 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign up for Expense Tracker</h2>
+      <p class="max-w mt-2 text-center text-sm text-gray-600">
+        If you have an account
+        <a [routerLink]="['/login']" routerLinkActive="router-link-active"  href="#" class="font-medium text-green-600 hover:text-green-400">Login</a>
+      </p>
+    </div>
+  
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div class="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
+        <form class="space-y-6" [formGroup]="signUpForm" (ngSubmit)="signUp()" action="#" method="POST">
+          <div>
+            <label for="username" class="block text-sm font-medium text-gray-700"> Username </label>
+            <div class="mt-1">
+              <input formControlName="userName" id="username" name="username" type="text" required class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm" placeholder="Enter your username" />
+            </div>
+          </div>
+  
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700"> Email address </label>
+            <div class="mt-1">
+              <input formControlName="email" id="email" name="email" type="email" autocomplete="email" required class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm" placeholder="Enter your email address" />
+            </div>
+          </div>
+  
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700"> Password </label>
+            <div class="mt-1">
+              <input formControlName="password" id="password" name="password" type="password" autocomplete="current-password" required class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm" placeholder="Enter your password" />
+            </div>
+          </div>
+
+          
+  
+          <div>
+            <button  type="submit" class="group relative flex w-full justify-center rounded-md border border-transparent bg-LogoGreen px-4 py-2 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Sign in</button>
+          </div>
+        </form>
+        <div class="mt-6">
+          <div class="relative">
+            <div class="absolute inset-0 flex items-center">
+              <!-- <div class="w-full border-t border-gray-300"></div> -->
+            </div>
+            <!-- <div class="relative flex justify-center text-sm">
+              <span class="bg-gray-100 px-2 text-gray-500"> Or continue with </span>
+            </div> -->
+          </div>
+  
+          <div class="mt-6 grid grid-cols-1">
+            <!-- <div> -->
+              <!-- <button (click)="SignUpWithGoogle()"  href="#" class="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-3 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
+                <img class="h-6 w-6" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png" alt="" />
+              </button> -->
+            <!-- </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
