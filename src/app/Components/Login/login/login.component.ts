@@ -4,13 +4,14 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import Swal from 'sweetalert2';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../Services/AuthService/auth.service';
+import { FooterComponent } from "../../Footer/footer/footer.component";
 
 @Component({
     selector: 'app-login',
     standalone: true,
     templateUrl: './login.component.html',
     styleUrl: './login.component.css',
-    imports: [NavbarComponent, FormsModule, ReactiveFormsModule, RouterLink]
+    imports: [NavbarComponent, FormsModule, ReactiveFormsModule, RouterLink, FooterComponent]
 })
 export class LoginComponent {
   private _authService = inject(AuthService);

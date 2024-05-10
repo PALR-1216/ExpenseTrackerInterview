@@ -4,13 +4,14 @@ import { AuthService } from '../../../Services/AuthService/auth.service';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { NavbarComponent } from "../../Navbar/navbar/navbar.component";
+import { FooterComponent } from "../../Footer/footer/footer.component";
 
 @Component({
     selector: 'app-signup',
     standalone: true,
     templateUrl: './signup.component.html',
     styleUrl: './signup.component.css',
-    imports: [RouterLink, FormsModule, ReactiveFormsModule, NavbarComponent]
+    imports: [RouterLink, FormsModule, ReactiveFormsModule, NavbarComponent, FooterComponent]
 })
 export class SignupComponent {
 

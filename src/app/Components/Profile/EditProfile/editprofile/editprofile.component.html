@@ -1,0 +1,99 @@
+<!-- Card Section -->
+<div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+  <form [formGroup]="updateProfile" (ngSubmit)="onSubmit()">
+      <!-- Card -->
+      <div class="bg-gray-100 rounded-xl shadow">
+    
+        <div class="pt-0 p-4 sm:pt-0 sm:p-7">
+          <!-- Grid -->
+          <div class="space-y-4 sm:space-y-6">
+            <div>
+              <label class="sr-only">
+                Product photo
+              </label>
+  
+              <div class="grid sm:flex sm:items-center sm:gap-x-5">
+                <img class="-mt-8 relative z-10 inline-block size-24 mx-auto sm:mx-0 rounded-full ring-4 ring-white dark:ring-neutral-900" [src]="this.userInfo.userImage ? this.userInfo.userImage : 'https://upload.wikimedia.org/wikipedia/commons/a/af/Default_avatar_profile.jpg'" alt="Description">
+  
+                <div class="mt-4 sm:mt-auto sm:mb-1.5 flex justify-center sm:justify-start gap-2">
+                    <input type="file" accept="image/png, image/jpeg, image/jpg" (change)="onFileSelected($event)" hidden #fileInput>
+                  <button  (click)="fileInput.click()" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700">
+                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                    Upload Image
+                  </button>
+                  <button (click)="removePhoto()" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-red-500 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none ">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+  
+            <div class="space-y-2">
+              <label for="af-submit-app-user-name" class="inline-block text-sm font-medium text-gray-800 mt-2.5 ">
+                UserName
+              </label>
+  
+              <input formControlName="userName" id="af-submit-app-user-name" placeholder="{{this.userInfo.userName}}" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" >
+            </div>
+  
+            <div class="space-y-2">
+              <label for="af-submit-fullName" class="inline-block text-sm font-medium text-gray-800 mt-2.5 dark:text-neutral-200">
+                Full Name
+              </label>
+  
+              <input formControlName="fullName" id="af-submit-fullName" placeholder="{{this.userInfo.fullName ?? 'Add Full name'}}" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" >
+            </div>
+
+            <div class="space-y-2">
+              <label for="af-submit-Email" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                Email
+            </label>
+            <input formControlName="Email" id="af-submit-Email" type="email" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="{{this.userInfo.Email}}">
+            </div>
+
+
+            <div class="space-y-2">
+
+               
+            
+                <!-- Old Password -->
+                <label for="af-submit-oldPassword" class="inline-block text-sm font-medium text-gray-800 mt-2.5 dark:text-neutral-200">
+                    Old Password
+                </label>
+                <input formControlName="oldPassword" id="af-submit-oldPassword" type="password" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Enter your old password">
+            
+                <!-- New Password -->
+                <label for="af-submit-newPassword" class="inline-block text-sm font-medium text-gray-800 mt-2.5 dark:text-neutral-200">
+                    New Password
+                </label>
+                <input formControlName="newPassword" id="af-submit-newPassword" type="password" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Enter your new password">
+            
+                <!-- Confirm New Password -->
+                <label for="af-submit-confirmNewPassword" class="inline-block text-sm font-medium text-gray-800 mt-2.5 dark:text-neutral-200">
+                    Confirm New Password
+                </label>
+                <input formControlName="confirmPassword" id="af-submit-confirmNewPassword" type="password" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Confirm your new password">
+            </div>
+            
+
+
+            
+
+          </div>
+          <!-- End Grid -->
+  
+          <div class="mt-5 flex justify-center gap-x-2">
+            <button type="submit" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+              Update profile
+            </button>
+
+            <button [routerLink]="['/profile']" routerLinkActive="router-link-active"  type="button" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none">
+                Cancel
+              </button>
+          </div>
+        </div>
+      </div>
+      <!-- End Card -->
+    </form>
+  </div>
+  <!-- End Card Section -->

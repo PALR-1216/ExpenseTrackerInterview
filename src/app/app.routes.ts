@@ -6,6 +6,8 @@ import { AboutusComponent } from './Components/AboutUs/aboutus/aboutus.component
 import { HomeComponent } from './Components/Home/home/home.component';
 import { AuthGuard } from './AuthGuard/auth.guard';
 import { ExpensecategoryComponent } from './Components/ExpenseCategorys/expensecategory/expensecategory.component';
+import { ProfileComponent } from './Components/Profile/profile/profile.component';
+import { EditprofileComponent } from './Components/Profile/EditProfile/editprofile/editprofile.component';
 
 export const routes: Routes = [
     {path:'landing', component:LandingComponent},
@@ -13,6 +15,9 @@ export const routes: Routes = [
     {path:'login', component:LoginComponent},
     {path:'signup', component:SignupComponent},
     {path:'home', component:HomeComponent, canActivate: [AuthGuard]},
+    {path:'profile', component:ProfileComponent,  canActivate:[AuthGuard]},
+    {path:'editProfile', component:EditprofileComponent, canActivate:[AuthGuard]},
     {path:'expenseCategory', component:ExpensecategoryComponent, canActivate:[AuthGuard]},
+
     { path: '', redirectTo: '/landing', pathMatch: 'full' },
 ];

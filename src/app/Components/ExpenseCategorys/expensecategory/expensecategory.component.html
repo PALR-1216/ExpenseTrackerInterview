@@ -90,7 +90,7 @@
                   <td class="px-6 py-4 whitespace-nowrap">{{ category.dateCreated | date:'mediumDate' }}</td>
                   <td class="px-6 py-4 whitespace-nowrap">{{ category.expenseID.slice(-8) }}</td>
                   <td class="px-6 py-3 text-end  text-blue-500"><button class="underline" (click)="editCategory(category.expenseID)">Edit</button> </td>
-                  <td class="px-6 py-3 text-end underline text-green-600"><button class="underline" (click)="deleteCategory(category.expenseID)">Delete</button> </td>
+                  <td class="px-6 py-3 text-end underline text-red-600"><button class="underline" (click)="deleteCategory(category.expenseID)">Delete</button> </td>
                   <!-- Add delete/edit buttons or actions here -->
                 </tr>
               </tbody>
