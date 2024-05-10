@@ -20,8 +20,9 @@ export class EditprofileComponent implements OnInit{
   private _profileService = inject(ProfileService);
   private _router = inject(Router);
 
-  ngOnInit() {
-    this.getprofileInfo();
+  async ngOnInit() {
+    await this.getprofileInfo();
+    
     
   }
 
