@@ -1,0 +1,4 @@
+.router-link-active {
+    background-color: #f3f4f6;/* Change to your active background color */
+    color: #333; /* Change to your active text color */
+}

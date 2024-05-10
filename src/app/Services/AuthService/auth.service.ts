@@ -70,6 +70,7 @@ export class AuthService {
         Password: password,
         Email: email,
         userID: crypto.randomUUID(),
+        userCreated:new Date()
     };
 
     this.setCookie(userObj.userID);

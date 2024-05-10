@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../Services/AuthService/auth.service';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { NavbarComponent } from "../../Navbar/navbar/navbar.component";
 
@@ -18,14 +18,17 @@ export class SignupComponent {
 
 
   signUpForm = new FormGroup({
-    userName: new FormControl("", Validators.required),  
+    userName: new FormControl("", Validators.required),
     email: new FormControl("", [Validators.required, Validators.email]),
-    password: new FormControl("", [Validators.required, Validators.minLength(8)])  
-  });
+    password: new FormControl("", [Validators.required, Validators.minLength(8)]),
+    confirmPassword: new FormControl("", Validators.required),
+  }, {validators:this.passwordMatcherValidator()});
+
 
   async signUp() {
     // Check if all required fields are filled (not necessarily valid)
     if (this.signUpForm.invalid) {
+
         let message = "Please enter all fields correctly.";
 
         // Detailed checks for each field
@@ -39,7 +42,12 @@ export class SignupComponent {
             message = "Please enter a password.";
         } else if (this.signUpForm.get('password')?.hasError("minlength")) {
             message = "Your password must be at least 8 characters long.";
+        } else if(this.signUpForm.get("confirmPassword")?.hasError("required")) {
+          message = "Please confirm password";
+        }else if(this.signUpForm.errors?.["passwordMismatch"]) {
+          message = "Passwords do not match";
         }
+  
 
         await Swal.fire({
             position: "center",
@@ -48,7 +56,7 @@ export class SignupComponent {
             showConfirmButton: false,
             timer: 1200
         });
-        return;  // Stop further execution
+        return;  // Stop  execution
     }
 
     // Proceed if the form is valid
@@ -72,6 +80,24 @@ export class SignupComponent {
         });
     }
 }
+
+  private passwordMatcherValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control instanceof FormGroup) {  // Check if the control is a FormGroup
+        const password = control.get('password')?.value;
+        const confirmPassword = control.get('confirmPassword')?.value;
+        if (password !== confirmPassword) {
+          // Return an error if passwords don't match
+          return { passwordMismatch: true };
+        }
+      }
+      // Return null if there is no error
+      return null;
+    };
+  }
+
+
+
 
 
 
