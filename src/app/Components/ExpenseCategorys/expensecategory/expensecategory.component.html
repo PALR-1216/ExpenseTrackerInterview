@@ -1,7 +1,16 @@
-<h2 class="text-3xl font-extrabold">Expense Categories</h2>
+
+<div *ngIf="this.loading"  class="flex justify-center items-center h-screen">
+    <div class="flex flex-col items-center">
+      <h1 class="text-xl font-semibold text-gray-800 mb-4">Loading...</h1>
+      <div class="rounded-md h-12 w-12 border-4 border-t-4 border-green-500 animate-spin"></div>
+    </div>
+  </div>
+  
+
+<h2 *ngIf="!this.loading" class="text-3xl font-extrabold">Expense Categories</h2>
 
 <!-- Table Section -->
-<div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-5 mx-auto">
+<div *ngIf="!this.loading" class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-5 mx-auto">
     <!-- Card -->
     <div class="flex flex-col">
       <div class="-m-1.5 overflow-x-auto">
@@ -14,14 +23,20 @@
                   Expense Category
                 </h2>
                 <p class="text-sm text-gray-600 ">
-                  Add Expenses, edit and delete.
+                  Add Expenses, edit and delete them.
                 </p>
               </div>
   
               <div>
                 <div class="inline-flex gap-x-2">
+                    <button (click)="refreshTable()" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-400 hover:text-black disabled:opacity-50 disabled:pointer-events-none" href="#">
+                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                          </svg>
+                          Regresh Table
+                      </button> 
                  
-                  <button (click)="openAddCategoryModal()" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" href="#">
+                  <button (click)="openAddCategoryModal()" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-LogoGreen text-white hover:bg-green-400 disabled:opacity-50 disabled:pointer-events-none" href="#">
                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                     Add Expense
                   </button>
@@ -44,10 +59,12 @@
                     </div>
                   </th>
   
+                  
+  
                   <th scope="col" class="px-6 py-3 text-start">
                     <div class="flex items-center gap-x-2">
                       <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">
-                        Position
+                        Date Added
                       </span>
                     </div>
                   </th>
@@ -55,34 +72,27 @@
                   <th scope="col" class="px-6 py-3 text-start">
                     <div class="flex items-center gap-x-2">
                       <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">
-                        Status
+                        Category ID
                       </span>
                     </div>
                   </th>
+
   
-                  <th scope="col" class="px-6 py-3 text-start">
-                    <div class="flex items-center gap-x-2">
-                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">
-                        Portfolio
-                      </span>
-                    </div>
-                  </th>
-  
-                  <th scope="col" class="px-6 py-3 text-start">
-                    <div class="flex items-center gap-x-2">
-                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">
-                        Created
-                      </span>
-                    </div>
-                  </th>
-  
-                  <th scope="col" class="px-6 py-3 text-end"></th>
+                  <th scope="col" class="px-6 py-3 text-end">Edit</th>
+                  <th scope="col" class="px-6 py-3 text-end">Delete</th>
                 </tr>
               </thead>
   
               <tbody class="divide-y divide-gray-200">
                 <!-- Rows go here -->
-
+                <tr *ngFor="let category of this.allCategorysArray">
+                  <td class="px-6 py-4 whitespace-nowrap">{{ category.categoryName}}</td>
+                  <td class="px-6 py-4 whitespace-nowrap">{{ category.dateCreated | date:'mediumDate' }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap">{{ category.expenseID.slice(-8) }}</td>
+                  <td class="px-6 py-3 text-end  text-blue-500"><button class="underline" (click)="editCategory(category.expenseID)">Edit</button> </td>
+                  <td class="px-6 py-3 text-end underline text-green-600"><button class="underline" (click)="deleteCategory(category.expenseID)">Delete</button> </td>
+                  <!-- Add delete/edit buttons or actions here -->
+                </tr>
               </tbody>
             </table>
             <!-- End Table -->

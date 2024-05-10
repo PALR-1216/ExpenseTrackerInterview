@@ -7,6 +7,7 @@ import { NgClass, NgIf } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { IStaticMethods } from 'preline';
 import { Router, Event, NavigationEnd } from '@angular/router';
+import { ExpenseService } from './Services/ExpenseService/expense.service';
 declare global {
   interface Window {
     HSStaticMethods: IStaticMethods;
@@ -25,6 +26,7 @@ export class AppComponent implements OnInit{
   public isLoading: boolean = false;
   private _authService = inject(AuthService);
   public _router = inject(Router);
+  private _expenseCategoryService = inject(ExpenseService);
   public userName:any = ""
   isAuthenticated: boolean = false;
 
@@ -43,10 +45,11 @@ export class AppComponent implements OnInit{
     // this.routerEvent();
     this.isLoading = true 
     try {
+      this.userName = this._authService.checkCookie("userName")
       await this.checkToken();
       await this.getUserInfo();
+      this.loadExpenseCategoryList();
       
-      this.userName = this._authService.checkCookie("userName")
 
 
     }catch(error) {
@@ -86,6 +89,12 @@ export class AppComponent implements OnInit{
       }
     })
 
+  }
+
+  loadExpenseCategoryList() {
+    this._expenseCategoryService.getAllCategories().then((Data:any) => {
+      this._expenseCategoryService.allCategorysArray = Data;
+    })
   }
 
 
