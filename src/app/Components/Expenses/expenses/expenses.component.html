@@ -22,12 +22,12 @@
         </button>
               
           <div class="flex items-center">
-            <button class="bg-blue-500 text-white font-bold py-2 px-4 ml-4 rounded" (click)="showCategoryFilter()">Category Filter</button>
+            <button class="bg-blue-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 ml-4 rounded" (click)="showCategoryFilter()">Category Filter</button>
           </div>
           <button (click)="reloadTable()"  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Reload Table
         </button>
-        <button [routerLink]="['/addExpense']" routerLinkActive="router-link-active" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <button [routerLink]="['/addExpense']" routerLinkActive="router-link-active" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
             Add Expense
         </button>
     </div>
@@ -87,8 +87,8 @@
         <td class="px-6 py-4 whitespace-nowrap">{{expense.expenseCategory}}</td>
         <td class="px-6 py-4 whitespace-nowrap">{{ expense.expenseDate | date: 'MMM d, y' }}</td>
         <td class="px-6 py-4 whitespace-nowrap">${{expense.expenseAmount}}</td>
-        <td class="px-6 py-3 text-end text-blue-500"><button class="underline">Edit</button></td>
-        <td class="px-6 py-3 text-end text-blue-500"><button class="underline">View</button></td>
+        <td class="px-6 py-3 text-end text-blue-500"><a [routerLink]="['/editExpense', expense.expenseID]" href="#" class="underline">Edit</a></td>
+        <td class="px-6 py-3 text-end text-blue-500"><a [routerLink]="['/viewExpense', expense.expenseID]" href="#" class="underline">View</a></td>
         <!-- Add delete/edit buttons or actions here -->
       </tr>
 

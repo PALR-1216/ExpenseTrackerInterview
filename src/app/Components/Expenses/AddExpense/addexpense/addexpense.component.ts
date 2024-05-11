@@ -3,12 +3,12 @@ import { ExpenseService } from '../../../../Services/ExpenseService/expense.serv
 import { NgFor } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-addexpense',
   standalone: true,
-  imports: [NgFor, FormsModule, ReactiveFormsModule],
+  imports: [NgFor, FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './addexpense.component.html',
   styleUrl: './addexpense.component.css'
 })

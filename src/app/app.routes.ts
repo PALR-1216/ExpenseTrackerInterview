@@ -10,6 +10,8 @@ import { ProfileComponent } from './Components/Profile/profile/profile.component
 import { EditprofileComponent } from './Components/Profile/EditProfile/editprofile/editprofile.component';
 import { ExpensesComponent } from './Components/Expenses/expenses/expenses.component';
 import { AddexpenseComponent } from './Components/Expenses/AddExpense/addexpense/addexpense.component';
+import { EditexpenseComponent } from './Components/Expenses/EditExpense/editexpense/editexpense.component';
+import { ViewexpenseComponent } from './Components/Expenses/ViewExpense/viewexpense/viewexpense.component';
 
 export const routes: Routes = [
     {path:'landing', component:LandingComponent},
@@ -22,5 +24,7 @@ export const routes: Routes = [
     {path:'expenseCategory', component:ExpensecategoryComponent, canActivate:[AuthGuard]},
     {path:'expenses', component:ExpensesComponent, canActivate:[AuthGuard]},
     {path:'addExpense', component:AddexpenseComponent, canActivate:[AuthGuard]},
+    {path:'editExpense/:expenseID', component: EditexpenseComponent, canActivate:[AuthGuard]},
+    {path:'viewExpense/:expenseID', component:ViewexpenseComponent, canActivate:[AuthGuard]},
     { path: '', redirectTo: '/landing', pathMatch: 'full' },
 ];

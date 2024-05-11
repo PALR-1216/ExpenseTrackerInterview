@@ -107,10 +107,11 @@ export class ExpensesComponent implements OnInit {
       if (result.isConfirmed) {
         // Retrieve selected value from the modal
         const selectedValue = (document.getElementById('categorySelect') as HTMLSelectElement).value;
-        // Update selectedCategory variable
-        this.selectedCategory = selectedValue;
+        // Update selectedCategory variableselectedValue;
         // Do something with selectedCategory
-        console.log('Selected Category:', this.selectedCategory);
+        console.log('Selected Category:', selectedValue);
+        this.getCategoryFiltered(selectedValue);
+        
       }
     });
   }
@@ -150,22 +151,42 @@ export class ExpensesComponent implements OnInit {
     });
   }
 
+
+  async getCategoryFiltered(selectedValue:any) {
+    let TempArray:any = [];
+    const ref = collection(this._firestore, "Expenses");
+    const querySnapshot = query(ref, where("expenseCategory" , "==", selectedValue ))
+    const snapshot = (await getDocs(querySnapshot)).forEach((doc) => {
+      // console.log(doc.data());
+      TempArray.push(doc.data());
+    })
+    this.expensesArray = TempArray;
+  }
+
   handleInputChange(event: Event) {
     // Handle input change here
     const inputValue = (event.target as HTMLInputElement).value;
     console.log('Input value:', inputValue);
     this.searchExpenseNameFilter(inputValue);
   }
-  async searchExpenseNameFilter(inputValue: string) {
-    const ref = collection(this._firestore, "Expenses");
-    const querySnapshot = query(ref, where("expenseName", ">=", inputValue));
-    const snapshot = await getDocs(querySnapshot);
-    
-    if (snapshot.empty) {
-      return null;
-    } else {
-      this.expensesArray = snapshot.docs.map(doc => doc.data());
-      return this.expensesArray;
+  
+  async searchExpenseNameFilter(inputValue: string): Promise<any[] | null> {
+    try {
+      const ref = collection(this._firestore, 'Expenses');
+      const querySnapshot = await getDocs(ref);
+      const filteredExpenses = querySnapshot.docs
+        .map(doc => doc.data())
+        .filter(expense => expense['expenseName'].includes(inputValue));
+
+      if (filteredExpenses.length === 0) {
+        return null;
+      } else {
+        this.expensesArray = filteredExpenses;
+        return this.expensesArray;
+      }
+    } catch (error) {
+      console.error('Error searching expense names:', error);
+      throw error; // Rethrow the error for the caller to handle
     }
   }
 }
