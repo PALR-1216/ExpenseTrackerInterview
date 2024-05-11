@@ -2,7 +2,8 @@ import { Injectable, OnDestroy, OnInit, inject } from '@angular/core';
 import { AuthService } from '../AuthService/auth.service';
 import { collection, query, where, getDocs, DocumentData } from 'firebase/firestore';
 import { Observable, Subject } from 'rxjs';
-import { Firestore, addDoc, deleteDoc, doc, getDoc, onSnapshot, updateDoc } from '@angular/fire/firestore';
+import { Firestore, addDoc, deleteDoc, doc, getDoc, onSnapshot, snapToData, updateDoc } from '@angular/fire/firestore';
+import { ref } from '@angular/fire/storage';
 
 
 
@@ -103,5 +104,34 @@ export class ExpenseService implements OnInit{
       // Delete the document
       return deleteDoc(docRef);
     });
+  }
+
+
+  addExpense(expenseObj:any,ReceiptImage:any ):Promise<any> {
+    const expenseRef = collection(this._firestore, "Expenses");
+    let expense:any = {
+      expenseID:crypto.randomUUID(),
+      expenseName:expenseObj.expenseName,
+      expenseCategory:expenseObj.expenseCategory,
+      expenseDate:expenseObj.expenseDate,
+      expenseAmount:expenseObj.expenseAmount,
+      ReceiptImage:ReceiptImage || null,
+      expenseUserID:this._authService.checkCookie("userID")
+    }
+    return addDoc(expenseRef, expense);
+  }
+
+
+  async getExpenses():Promise<any> {
+    const expenseRef = query(collection(this._firestore, "Expenses"), where("expenseUserID", "==", this._authService.checkCookie("userID")));
+    const snapshot = await getDocs(expenseRef);
+    if(snapshot.empty) {
+      return []; 
+    }
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
   }
 }

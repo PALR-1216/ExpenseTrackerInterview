@@ -1,2 +1,105 @@
 
-<h1>hello world</h1>
+<div *ngIf="this.isLoading"  class="flex justify-center items-center h-screen">
+    <div class="flex flex-col items-center">
+      <h1 class="text-xl font-semibold text-gray-800 mb-4">Loading...</h1>
+      <div class="rounded-md h-12 w-12 border-4 border-t-4 border-green-500 animate-spin"></div>
+    </div>
+  </div>
+  
+
+
+
+<div *ngIf="!this.isLoading" class="flex justify-between items-center pb-10">
+    <h1 class="text-1xl font-bold tracking-tight text-gray-900 sm:text-1xl md:text-2xl">
+        <span class="block">Expense Tracking</span>
+    </h1>
+    <div class="flex items-center gap-4">
+  
+      
+        <input type="text" (input)="handleInputChange($event)" placeholder="Search..." class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+        <button (click)="openDateRangePicker()" routerLinkActive="router-link-active"  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Date Range Filter
+        </button>
+              
+          <div class="flex items-center">
+            <button class="bg-blue-500 text-white font-bold py-2 px-4 ml-4 rounded" (click)="showCategoryFilter()">Category Filter</button>
+          </div>
+          <button (click)="reloadTable()"  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Reload Table
+        </button>
+        <button [routerLink]="['/addExpense']" routerLinkActive="router-link-active" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Add Expense
+        </button>
+    </div>
+</div>
+
+
+
+<table *ngIf="!this.isLoading" class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+      <tr>
+       
+
+        <th scope="col" class="ps-6  lg:ps-3 xl:ps-3 pe-6 py-3 text-start">
+          <div class="flex items-center gap-x-2">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">
+              Expense Name
+            </span>
+          </div>
+        </th>
+
+        
+
+        <th scope="col" class="px-6 py-3 text-start">
+          <div class="flex items-center gap-x-2">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">
+              Expense Category
+            </span>
+          </div>
+        </th>
+
+        <th scope="col" class="px-6 py-3 text-start">
+          <div class="flex items-center gap-x-2">
+            <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">
+              Date Added
+            </span>
+          </div>
+        </th>
+
+        <th scope="col" class="px-6 py-3 text-start">
+            <div class="flex items-center gap-x-2">
+              <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">
+                Amount
+              </span>
+            </div>
+          </th>
+
+
+        <th scope="col" class="px-6 py-3 text-end">Edit</th>
+        <th scope="col" class="px-6 py-3 text-end">Delete</th>
+      </tr>
+    </thead>
+
+    <tbody class="divide-y divide-gray-200">
+      <!-- Rows go here -->
+      <tr *ngFor="let expense of expensesArray">
+        <td class="px-6 py-4 whitespace-nowrap">{{expense.expenseName}}</td>
+        <td class="px-6 py-4 whitespace-nowrap">{{expense.expenseCategory}}</td>
+        <td class="px-6 py-4 whitespace-nowrap">{{ expense.expenseDate | date: 'MMM d, y' }}</td>
+        <td class="px-6 py-4 whitespace-nowrap">${{expense.expenseAmount}}</td>
+        <td class="px-6 py-3 text-end text-blue-500"><button class="underline">Edit</button></td>
+        <td class="px-6 py-3 text-end text-blue-500"><button class="underline">View</button></td>
+        <!-- Add delete/edit buttons or actions here -->
+      </tr>
+
+      
+    </tbody>
+  </table>
+
+
+
+
+  
+
+
+  
