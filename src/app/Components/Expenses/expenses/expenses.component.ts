@@ -29,8 +29,9 @@ export class ExpensesComponent implements OnInit {
     try {
       await this._expenseService.getAllCategories().then((categorys) => {
         this.expenseCategoryList = categorys
+        this.getAllExpenses();
       })
-       this.getAllExpenses();
+       
     } catch (error) {
       
     }finally {

@@ -76,7 +76,7 @@
 
 
         <th scope="col" class="px-6 py-3 text-end">Edit</th>
-        <th scope="col" class="px-6 py-3 text-end">Delete</th>
+        <th scope="col" class="px-6 py-3 text-end">View</th>
       </tr>
     </thead>
 
@@ -86,7 +86,7 @@
         <td class="px-6 py-4 whitespace-nowrap">{{expense.expenseName}}</td>
         <td class="px-6 py-4 whitespace-nowrap">{{expense.expenseCategory}}</td>
         <td class="px-6 py-4 whitespace-nowrap">{{ expense.expenseDate | date: 'MMM d, y' }}</td>
-        <td class="px-6 py-4 whitespace-nowrap">${{expense.expenseAmount}}</td>
+        <td class="px-6 py-4 whitespace-nowrap">{{expense.expenseAmount | currency:'USD':'symbol':'1.2-2' }}</td>
         <td class="px-6 py-3 text-end text-blue-500"><a [routerLink]="['/editExpense', expense.expenseID]" href="#" class="underline">Edit</a></td>
         <td class="px-6 py-3 text-end text-blue-500"><a [routerLink]="['/viewExpense', expense.expenseID]" href="#" class="underline">View</a></td>
         <!-- Add delete/edit buttons or actions here -->

@@ -134,4 +134,43 @@ export class ExpenseService implements OnInit{
     }));
 
   }
+
+
+  async getExpenseWithID(expenseID:any):Promise<any> {
+    let tempArray:any = []
+    const expenseRef = query(collection(this._firestore, "Expenses"), where("expenseID", "==", expenseID));
+    const snapshot = await getDocs(expenseRef);
+    if(snapshot.empty) {
+      return null;
+    } else {
+      
+      snapshot.forEach((doc:any) => {
+        if(doc.data.length === 0) {
+          tempArray.push(doc.data());
+        }
+      })
+
+      return tempArray[0];
+    }
+  }
+
+
+  async updateExpense(expenseData:any):Promise<any> {
+    //update the expense 
+    const ref = collection(this._firestore, "Expenses");
+    const q = query(ref, where("expenseID", "==", expenseData.expenseID));
+
+    const snapshot = await getDocs(q);
+    if(!snapshot.empty) {
+      const docRef = snapshot.docs[0].ref;
+      await updateDoc(docRef, expenseData);
+      snapshot.forEach((doc) => {
+        console.log("Data in service: ", doc.data());
+      })
+
+    } else {
+
+    }
+
+  }
 }

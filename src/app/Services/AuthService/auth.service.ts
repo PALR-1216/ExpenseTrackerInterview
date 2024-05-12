@@ -148,4 +148,9 @@ export class AuthService {
   getUserDetails() {
     let userRef = collection(this._firestore, 'users')
   }
+
+  updateUserName(newUserName:string) {
+    this._cookie.delete("userName");
+    this._cookie.set("userName", newUserName);
+  }
 }

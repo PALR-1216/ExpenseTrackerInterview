@@ -3,6 +3,7 @@ import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModu
 import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import { ProfileService } from '../../../../Services/ProfileService/profile.service';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../../Services/AuthService/auth.service';
 
 @Component({
   selector: 'app-editprofile',
@@ -18,6 +19,7 @@ export class EditprofileComponent implements OnInit{
   uploadedImage: any | ArrayBuffer | null = null;
   userInfo:any = {}
   private _profileService = inject(ProfileService);
+  private _authService = inject(AuthService);
   private _router = inject(Router);
 
   async ngOnInit() {
@@ -110,6 +112,8 @@ export class EditprofileComponent implements OnInit{
       };
       this._profileService.updateUserInfo(formData).then(async() => {
         console.log("data updated");
+        this._authService.updateUserName(formData.userName);
+
         await Swal.fire({
           position: "center",
           icon: "success",
@@ -117,7 +121,8 @@ export class EditprofileComponent implements OnInit{
           showConfirmButton: false,
           timer: 1200
         });
-        this._router.navigate(['/profile']);
+        // this._router.navigate(['/profile']);
+        location.reload();
 
       })
 
