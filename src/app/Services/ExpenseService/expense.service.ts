@@ -173,4 +173,14 @@ export class ExpenseService implements OnInit{
     }
 
   }
+
+  async deleteExpense(expenseID:any):Promise<any> {
+    const ref = collection(this._firestore, "Expenses");
+    const q = query(ref, where("expenseID", "==", expenseID))
+    const snapshot = await getDocs(q);
+    if(!snapshot.empty) {
+      const docRef = snapshot.docs[0].ref;
+      await deleteDoc(docRef);
+    }
+  }
 }

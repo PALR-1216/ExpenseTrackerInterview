@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ExpenseService } from '../../../Services/ExpenseService/expense.service';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Firestore, collection, getDoc, getDocs, query, where } from '@angular/fire/firestore';
 import { BrowserModule } from '@angular/platform-browser';
@@ -16,12 +16,14 @@ import { FormsModule } from '@angular/forms';
     imports: [NgFor, NgIf,RouterLink, CommonModule, FormsModule]
 })
 export class ExpensesComponent implements OnInit {
+
   
 
   public expenseCategoryList:any = [];
   private _expenseService = inject(ExpenseService);
   selectedCategory: string = '';
   public isLoading = false;
+  private _route = inject(Router);
   public expensesArray:any = []
   private _firestore = inject(Firestore);
   async ngOnInit() {
@@ -170,6 +172,44 @@ export class ExpensesComponent implements OnInit {
     console.log('Input value:', inputValue);
     this.searchExpenseNameFilter(inputValue);
   }
+
+
+  deleteExpense(expenseID: any) {
+    // Swal confirmation dialog
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // User confirmed deletion
+        this._expenseService.deleteExpense(expenseID).then(async (result) => {
+          await Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Expense Deleted',
+            showConfirmButton: false,
+            timer: 1200
+          });
+          this.reloadTable();
+          this._route.navigate(['/expenses']);
+        }).catch(async (error) => {
+          await Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: error.message,
+            showConfirmButton: false,
+            timer: 1200
+          });
+        });
+      }
+    });
+  }
+  
   
   async searchExpenseNameFilter(inputValue: string): Promise<any[] | null> {
     try {

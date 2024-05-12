@@ -31,12 +31,12 @@ export class EditprofileComponent implements OnInit{
 
 
   updateProfile = new FormGroup({
-    userName:new FormControl("", Validators.required),
-    fullName:new FormControl("", Validators.required),
-    Email:new FormControl("", Validators.required),
-    oldPassword:new FormControl("",[Validators.required, Validators.minLength(8)]),
-    newPassword: new FormControl("", [Validators.required, Validators.minLength(8)]),
-    confirmPassword:new FormControl("", [Validators.required, Validators.minLength(8)])
+    userName:new FormControl(""),
+    fullName:new FormControl(""),
+    Email:new FormControl(""),
+    oldPassword:new FormControl("",[ Validators.minLength(8)]),
+    newPassword: new FormControl("", [ Validators.minLength(8)]),
+    confirmPassword:new FormControl("", [ Validators.minLength(8)])
   }, {
     // validators:this.passwordMatchValidator
   })
@@ -82,53 +82,75 @@ export class EditprofileComponent implements OnInit{
   
   
 
-   onSubmit() {
-    if(!this.updateProfile.value.userName) {
-      this.showAlert("error", "Please enter User Name");
-    } else if(!this.updateProfile.value.fullName) {
-      this.showAlert("error", "Please enter Full name");
-    } else if(!this.updateProfile.value.Email) {
-      this.showAlert("error", "Please enter Email");
-    }else if (!this.updateProfile.value.oldPassword) {
-      this.showAlert("error", "Please enter Old Password");
-    } else if(this.updateProfile.value.oldPassword !== this.userInfo.Password) {
-      this.showAlert("error", "Password does not match the Old Passsword");
-    } else if(!this.updateProfile.value.newPassword || !this.updateProfile.value.confirmPassword) {
-      this.showAlert("error", "Please enter both new passwords");
-    } else if(this.updateProfile.value.newPassword !== this.updateProfile.value.confirmPassword ) {
-      this.showAlert("error", "Confirming password does not match");
-    } else if(this.updateProfile.value.oldPassword.length < 8 || this.updateProfile.value.newPassword.length < 8 || this.updateProfile.value.confirmPassword.length < 8) {
-      this.showAlert("error", "All password fields must be at least 8 characters long");
-    } else {
-
-      const formData = {
-        userName: this.updateProfile.value.userName,
-        fullName: this.updateProfile.value.fullName,
-        userImage:this.uploadedImage || null,
-        Email: this.updateProfile.value.Email,
-        Password: this.updateProfile.value.newPassword,
-        userID:this.userInfo.userID,
-        userCreated:this.userInfo.userCreated
-      };
-      this._profileService.updateUserInfo(formData).then(async() => {
-        console.log("data updated");
-        this._authService.updateUserName(formData.userName);
-
-        await Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Profile Updated",
-          showConfirmButton: false,
-          timer: 1200
-        });
-        // this._router.navigate(['/profile']);
-        location.reload();
-
-      })
-
+  onSubmit() {
+    console.log("Attempting to update profile...");
+  
+    // Check if old password is provided and handle potentially null values safely
+    if (this.updateProfile.value.oldPassword) {
+      console.log("Old Password provided.");
+  
+      if (this.updateProfile.value.oldPassword !== this.userInfo.Password) {
+        console.log("Old password does not match.");
+        this.showAlert("error", "Password does not match the Old Password");
+        return;  // Exit if old password does not match
+      }
+  
+      // Check both new passwords are provided before comparing them or checking their length
+      if (!this.updateProfile.value.newPassword || !this.updateProfile.value.confirmPassword) {
+        console.log("New passwords incomplete.");
+        this.showAlert("error", "Please enter both new passwords");
+        return;  // Exit if any new password field is empty
+      }
+  
+      if (this.updateProfile.value.newPassword !== this.updateProfile.value.confirmPassword) {
+        console.log("New passwords do not match.");
+        this.showAlert("error", "Confirming password does not match");
+        return;  // Exit if new passwords do not match
+      }
+  
+      // Ensure passwords are long enough if provided
+      if ((this.updateProfile.value.oldPassword && this.updateProfile.value.oldPassword.length < 8) ||
+          (this.updateProfile.value.newPassword && this.updateProfile.value.newPassword.length < 8) ||
+          (this.updateProfile.value.confirmPassword && this.updateProfile.value.confirmPassword.length < 8)) {
+        console.log("Password length requirement not met.");
+        this.showAlert("error", "All password fields must be at least 8 characters long");
+        return;  // Exit if any password is too short
+      }
     }
-    
+  
+    // Construct formData, only update password if new password has been set
+    const formData = {
+      userName: this.updateProfile.value.userName || this.userInfo.userName,
+      fullName: this.updateProfile.value.fullName || this.userInfo.fullName,
+      userImage: this.uploadedImage || null,
+      Email: this.updateProfile.value.Email || this.userInfo.Email,
+      Password: this.updateProfile.value.newPassword || this.userInfo.Password,  // Use new password if provided
+      userID: this.userInfo.userID,
+      userCreated: this.userInfo.userCreated
+    };
+  
+    console.log("Form data prepared, updating user info...");
+  
+    this._profileService.updateUserInfo(formData).then(async () => {
+      console.log("Data updated successfully.");
+      this._authService.updateUserName(formData.userName);
+  
+      await Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Profile Updated",
+        showConfirmButton: false,
+        timer: 1200
+      });
+  
+      // this._router.navigate(['/profile']);
+      location.reload();
+    });
   }
+  
+  
+  
+  
 
   private showAlert(icon: any, message: string) {
     Swal.fire({
