@@ -2,7 +2,7 @@ import { Injectable, OnDestroy, OnInit, inject } from '@angular/core';
 import { AuthService } from '../AuthService/auth.service';
 import { collection, query, where, getDocs, DocumentData } from 'firebase/firestore';
 import { Observable, Subject } from 'rxjs';
-import { Firestore, addDoc, deleteDoc, doc, getDoc, onSnapshot, snapToData, updateDoc } from '@angular/fire/firestore';
+import { Firestore, addDoc, deleteDoc, doc, getAggregateFromServer, getDoc, onSnapshot, snapToData, sum, updateDoc } from '@angular/fire/firestore';
 import { ref } from '@angular/fire/storage';
 
 
@@ -114,7 +114,7 @@ export class ExpenseService implements OnInit{
       expenseName:expenseObj.expenseName,
       expenseCategory:expenseObj.expenseCategory,
       expenseDate:expenseObj.expenseDate,
-      expenseAmount:expenseObj.expenseAmount,
+      expenseAmount:Number(expenseObj.expenseAmount),
       ReceiptImage:ReceiptImage || null,
       expenseUserID:this._authService.checkCookie("userID")
     }
@@ -183,4 +183,69 @@ export class ExpenseService implements OnInit{
       await deleteDoc(docRef);
     }
   }
+
+  async getTotalExpenses(): Promise<number> {
+    const userID = this._authService.checkCookie("userID"); // Retrieve user ID from the authentication service
+    const ref = collection(this._firestore, "Expenses");
+    const q = query(ref, where("expenseUserID", "==", userID)); // Filter expenses by user ID
+    const snapshot = await getDocs(q);
+  
+    let total = 0;
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      if (data['expenseAmount'] && typeof data['expenseAmount'] === 'number') {
+        total += data['expenseAmount'];
+      }
+    });
+  
+    return total;
+  }
+
+
+  async getTotalExpensesForUser():Promise<any> {
+    let tempArray:any = [];
+    const ref = collection(this._firestore, "Expenses");
+    const q = query(ref , where("expenseUserID", "==", this._authService.checkCookie("userID")));
+    const snapshot = await getDocs(q);
+    snapshot.docs.map((doc) => {
+      tempArray.push(doc.data());
+    })
+
+    return tempArray;
+  }
+
+  async getTotalExpenseByMonth(): Promise<any> {
+    let expensesByMonth:any = {};
+    const currentYear = new Date().getFullYear(); // Get the current year
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    const ref = collection(this._firestore, "Expenses");
+    const userID = this._authService.checkCookie("userID"); // Retrieve user ID from cookie
+    const q = query(ref, where("expenseUserID", "==", userID));
+    const snapshot = await getDocs(q);
+    snapshot.docs.forEach((doc) => {
+      const data = doc.data();
+      const expenseDate = new Date(data['expenseDate']); // Convert string to Date
+      const year = expenseDate.getFullYear(); // Get the year of the expense
+
+      if (year === currentYear) { // Check if the year of the expense is the current year
+        const month = monthNames[expenseDate.getMonth()]; // Get the month name
+        const key = `${month} ${year}`; // Format as 'Month YYYY'
+
+        if (!expensesByMonth[key]) {
+          expensesByMonth[key] = 0;
+        }
+        expensesByMonth[key] += data['expenseAmount']; 
+      }
+    });
+
+    return expensesByMonth; // Returns expenses for the current year
+  }
+
+  async getTotalExpenseByCategory():Promise<any> {
+    
+
+  }
+
+  
 }

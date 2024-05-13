@@ -28,7 +28,7 @@ export class AddexpenseComponent implements OnInit{
     expenseName:new FormControl("", Validators.required),
     expenseCategory: new FormControl("", Validators.required),
     expenseDate:new FormControl("", Validators.required),
-    expenseAmount: new FormControl('', [
+    expenseAmount: new FormControl("", [
       Validators.required,
       Validators.min(1),
       Validators.pattern(/^\d+(\.\d+)?$/)

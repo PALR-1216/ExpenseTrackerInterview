@@ -62,6 +62,7 @@ export class ExpensecategoryComponent implements OnInit, OnDestroy {
         }
 
         this._expenseCategory.addCategory(result.value);
+        this.refreshTable();
 
         return result;
       });
