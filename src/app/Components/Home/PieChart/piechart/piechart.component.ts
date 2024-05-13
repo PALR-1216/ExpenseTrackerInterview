@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { ExpenseService } from '../../../../Services/ExpenseService/expense.service';
 
 @Component({
   selector: 'app-piechart',
@@ -10,6 +11,7 @@ import { Chart, registerables } from 'chart.js';
 })
 export class PiechartComponent implements AfterViewInit{
   @ViewChild('chart') chartRef!: ElementRef<HTMLCanvasElement>;
+  private _expenseService = inject(ExpenseService);
   private chart!: Chart;
 
   constructor() {
@@ -22,6 +24,7 @@ export class PiechartComponent implements AfterViewInit{
   
   initChart() {
     throw new Error('Method not implemented.');
+
   }
 
 

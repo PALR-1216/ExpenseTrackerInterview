@@ -10,11 +10,11 @@ import { ref } from '@angular/fire/storage';
 @Injectable({
   providedIn: 'root'
 })
-export class ExpenseService implements OnInit{
+export class ExpenseService implements OnInit {
 
   constructor() { }
- 
-  
+
+
 
   public _authService = inject(AuthService);
   private _firestore = inject(Firestore);
@@ -24,7 +24,7 @@ export class ExpenseService implements OnInit{
 
 
   async ngOnInit() {
-    this.getAllCategories().then((Data:any) => {
+    this.getAllCategories().then((Data: any) => {
       this.allCategorysArray = Data;
     })
 
@@ -57,27 +57,27 @@ export class ExpenseService implements OnInit{
       throw error;
     }
   }
-  
 
-  
-  addCategory(nameOfCategory:any) {
+
+
+  addCategory(nameOfCategory: any) {
     const categoryRef = collection(this._firestore, "ExpenseCategory");
 
     let expenseObj = {
-      categoryName:nameOfCategory,
-      dateCreated:new Date(),
+      categoryName: nameOfCategory,
+      dateCreated: new Date(),
       expenseID: crypto.randomUUID(),
-      expenseUserID:this._authService.checkCookie("userID")
+      expenseUserID: this._authService.checkCookie("userID")
     }
     return addDoc(categoryRef, expenseObj);
   }
 
 
-  updateCategory(categoryID:any, newName:any):Promise<any> {
+  updateCategory(categoryID: any, newName: any): Promise<any> {
     const expenseRef = collection(this._firestore, "ExpenseCategory");
     const querySnapshotsnapshot = query(expenseRef, where("expenseID", "==", categoryID))
     return getDocs(querySnapshotsnapshot).then((snapshot) => {
-      if(snapshot.empty) {
+      if (snapshot.empty) {
         throw new Error('No category found with the given ID.');
       }
       const docRef = doc(this._firestore, "ExpenseCategory", snapshot.docs[0].id);
@@ -89,10 +89,10 @@ export class ExpenseService implements OnInit{
   deleteCategory(categoryID: any): Promise<void> {
 
     const expenseRef = collection(this._firestore, "ExpenseCategory");
-    
+
 
     const q = query(expenseRef, where("expenseID", "==", categoryID));
-  
+
     // Execute the query and delete the document
     return getDocs(q).then(snapshot => {
       if (snapshot.empty) {
@@ -107,26 +107,26 @@ export class ExpenseService implements OnInit{
   }
 
 
-  addExpense(expenseObj:any,ReceiptImage:any ):Promise<any> {
+  addExpense(expenseObj: any, ReceiptImage: any): Promise<any> {
     const expenseRef = collection(this._firestore, "Expenses");
-    let expense:any = {
-      expenseID:crypto.randomUUID(),
-      expenseName:expenseObj.expenseName,
-      expenseCategory:expenseObj.expenseCategory,
-      expenseDate:expenseObj.expenseDate,
-      expenseAmount:Number(expenseObj.expenseAmount),
-      ReceiptImage:ReceiptImage || null,
-      expenseUserID:this._authService.checkCookie("userID")
+    let expense: any = {
+      expenseID: crypto.randomUUID(),
+      expenseName: expenseObj.expenseName,
+      expenseCategory: expenseObj.expenseCategory,
+      expenseDate: expenseObj.expenseDate,
+      expenseAmount: Number(expenseObj.expenseAmount),
+      ReceiptImage: ReceiptImage || null,
+      expenseUserID: this._authService.checkCookie("userID")
     }
     return addDoc(expenseRef, expense);
   }
 
 
-  async getExpenses():Promise<any> {
+  async getExpenses(): Promise<any> {
     const expenseRef = query(collection(this._firestore, "Expenses"), where("expenseUserID", "==", this._authService.checkCookie("userID")));
     const snapshot = await getDocs(expenseRef);
-    if(snapshot.empty) {
-      return []; 
+    if (snapshot.empty) {
+      return [];
     }
     return snapshot.docs.map(doc => ({
       id: doc.id,
@@ -136,16 +136,16 @@ export class ExpenseService implements OnInit{
   }
 
 
-  async getExpenseWithID(expenseID:any):Promise<any> {
-    let tempArray:any = []
+  async getExpenseWithID(expenseID: any): Promise<any> {
+    let tempArray: any = []
     const expenseRef = query(collection(this._firestore, "Expenses"), where("expenseID", "==", expenseID));
     const snapshot = await getDocs(expenseRef);
-    if(snapshot.empty) {
+    if (snapshot.empty) {
       return null;
     } else {
-      
-      snapshot.forEach((doc:any) => {
-        if(doc.data.length === 0) {
+
+      snapshot.forEach((doc: any) => {
+        if (doc.data.length === 0) {
           tempArray.push(doc.data());
         }
       })
@@ -155,13 +155,13 @@ export class ExpenseService implements OnInit{
   }
 
 
-  async updateExpense(expenseData:any):Promise<any> {
+  async updateExpense(expenseData: any): Promise<any> {
     //update the expense 
     const ref = collection(this._firestore, "Expenses");
     const q = query(ref, where("expenseID", "==", expenseData.expenseID));
 
     const snapshot = await getDocs(q);
-    if(!snapshot.empty) {
+    if (!snapshot.empty) {
       const docRef = snapshot.docs[0].ref;
       await updateDoc(docRef, expenseData);
       snapshot.forEach((doc) => {
@@ -174,11 +174,11 @@ export class ExpenseService implements OnInit{
 
   }
 
-  async deleteExpense(expenseID:any):Promise<any> {
+  async deleteExpense(expenseID: any): Promise<any> {
     const ref = collection(this._firestore, "Expenses");
     const q = query(ref, where("expenseID", "==", expenseID))
     const snapshot = await getDocs(q);
-    if(!snapshot.empty) {
+    if (!snapshot.empty) {
       const docRef = snapshot.docs[0].ref;
       await deleteDoc(docRef);
     }
@@ -189,7 +189,7 @@ export class ExpenseService implements OnInit{
     const ref = collection(this._firestore, "Expenses");
     const q = query(ref, where("expenseUserID", "==", userID)); // Filter expenses by user ID
     const snapshot = await getDocs(q);
-  
+
     let total = 0;
     snapshot.forEach(doc => {
       const data = doc.data();
@@ -197,15 +197,15 @@ export class ExpenseService implements OnInit{
         total += data['expenseAmount'];
       }
     });
-  
+
     return total;
   }
 
 
-  async getTotalExpensesForUser():Promise<any> {
-    let tempArray:any = [];
+  async getTotalExpensesForUser(): Promise<any> {
+    let tempArray: any = [];
     const ref = collection(this._firestore, "Expenses");
-    const q = query(ref , where("expenseUserID", "==", this._authService.checkCookie("userID")));
+    const q = query(ref, where("expenseUserID", "==", this._authService.checkCookie("userID")));
     const snapshot = await getDocs(q);
     snapshot.docs.map((doc) => {
       tempArray.push(doc.data());
@@ -215,7 +215,7 @@ export class ExpenseService implements OnInit{
   }
 
   async getTotalExpenseByMonth(): Promise<any> {
-    let expensesByMonth:any = {};
+    let expensesByMonth: any = {};
     const currentYear = new Date().getFullYear(); // Get the current year
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -235,17 +235,76 @@ export class ExpenseService implements OnInit{
         if (!expensesByMonth[key]) {
           expensesByMonth[key] = 0;
         }
-        expensesByMonth[key] += data['expenseAmount']; 
+        expensesByMonth[key] += data['expenseAmount'];
       }
     });
 
     return expensesByMonth; // Returns expenses for the current year
   }
 
-  async getTotalExpenseByCategory():Promise<any> {
-    
 
+ async getTotalExpenseByCategory(): Promise<any> {
+    // Fetch categories and expenses
+    const categories = await this.getAllCategories();
+    const expenses = await this.getTotalExpensesForPieChart();
+
+    // Log categories and expenses to check their structure and content
+    // console.log("Categories:", categories);
+    // console.log("Expenses:", expenses);
+
+    // Initialize total expenses by category object
+    const totalExpensesByCategory: any = {};
+
+    // Set up categories in the total expense object
+    categories.forEach(category => {
+        totalExpensesByCategory[category['categoryName']] = 0;
+    });
+
+    // Calculate total expenses by category
+    let totalExpenses = 0;  // Initialize a variable to keep track of total expenses
+    expenses.forEach((expense: any) => {
+        let expenseCategoryName = expense['expenseCategory'];
+        if (totalExpensesByCategory.hasOwnProperty(expenseCategoryName)) {
+            let expenseAmount = parseFloat(expense['expenseAmount']);
+            totalExpensesByCategory[expenseCategoryName] += expenseAmount;
+            totalExpenses += expenseAmount;  // Increment total expenses with each expense amount
+        } else {
+            console.log("Category not found for expense:", expense);
+        }
+    });
+
+    // Log the total expenses object to check final sums
+    // console.log("Total Expenses by Category:", totalExpensesByCategory);
+
+    // Calculate and log the percentage of expenses for each category
+    const categoryPercentages:any = {};
+    for (const categoryName in totalExpensesByCategory) {
+        let categoryTotal = totalExpensesByCategory[categoryName];
+        let percentage = (categoryTotal / totalExpenses) * 100;
+        categoryPercentages[categoryName] = `${percentage.toFixed(2)}%`;  // Format percentage to 2 decimal places
+    }
+
+    // Log the percentage of expenses for each category
+
+    // Optionally, return both totals and percentages
+    return {
+        totalExpensesByCategory,
+        categoryPercentages
+    };
+}
+
+
+
+
+
+  async getTotalExpensesForPieChart(): Promise<any> {
+    let tempArray: any = [];
+    const ref = collection(this._firestore, "Expenses");
+    const q = query(ref, where("expenseUserID", "==", this._authService.checkCookie("userID")));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(), // Spread all fields
+    }));
   }
-
-  
 }
