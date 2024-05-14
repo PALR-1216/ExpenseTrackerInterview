@@ -12,11 +12,16 @@ import { ExpensesComponent } from './Components/Expenses/expenses/expenses.compo
 import { AddexpenseComponent } from './Components/Expenses/AddExpense/addexpense/addexpense.component';
 import { EditexpenseComponent } from './Components/Expenses/EditExpense/editexpense/editexpense.component';
 import { ViewexpenseComponent } from './Components/Expenses/ViewExpense/viewexpense/viewexpense.component';
+import { ForgotpasswordComponent } from './Components/ForgotPassword/forgotpassword/forgotpassword.component';
+import { SettingsComponent } from './Components/Settings/settings/settings.component';
+import { RecoveraccountComponent } from './Components/RecoverAccount/recoveraccount/recoveraccount.component';
 
 export const routes: Routes = [
     {path:'landing', component:LandingComponent},
     {path: 'aboutUs', component:AboutusComponent},
+    {path:"RecoverAccount", component:RecoveraccountComponent},
     {path:'login', component:LoginComponent},
+    {path:'forgotPassword', component:ForgotpasswordComponent},
     {path:'signup', component:SignupComponent},
     {path:'home', component:HomeComponent, canActivate: [AuthGuard]},
     {path:'profile', component:ProfileComponent,  canActivate:[AuthGuard]},
@@ -26,5 +31,8 @@ export const routes: Routes = [
     {path:'addExpense', component:AddexpenseComponent, canActivate:[AuthGuard]},
     {path:'editExpense/:expenseID', component: EditexpenseComponent, canActivate:[AuthGuard]},
     {path:'viewExpense/:expenseID', component:ViewexpenseComponent, canActivate:[AuthGuard]},
+    {path:'settings', component:SettingsComponent, canActivate:[AuthGuard]},
     { path: '', redirectTo: '/landing', pathMatch: 'full' },
+    { path: '**', redirectTo: '/landing' }
+  
 ];

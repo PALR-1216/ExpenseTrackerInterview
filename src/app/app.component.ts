@@ -65,16 +65,37 @@ export class AppComponent implements OnInit{
     this._authService.deleteCookie();
   }
 
-
   async checkToken() {
     this.isAuthenticated = await this._authService.getCookie() ? true : false;
-    console.log(this.isAuthenticated);
-    if(this.isAuthenticated) {
-      this._router.navigate(['/home']);
+    console.log('Authenticated:', this.isAuthenticated);
+    console.log('Current Route:', this._router.url);
+
+    // Direct check for the /forgotPassword route
+    const isPasswordRecoveryRoute = this._router.url.startsWith('/forgotPassword');
+    console.log('Is Password Recovery Route:', isPasswordRecoveryRoute);
+
+    // Handling based on the route and authentication status
+    if (isPasswordRecoveryRoute) {
+        if (!this.isAuthenticated) {
+            // Redirect to the password recovery component if not authenticated
+            this._router.navigate(['/password-recovery']);  // Assuming '/password-recovery' is your intended target
+        } else {
+            // Redirect authenticated users away from the forgot password page (usually to the home page)
+            this._router.navigate(['/home']);
+        }
     } else {
-      this._router.navigate(['/landing']);
+        // Handling for other routes
+        if (this.isAuthenticated) {
+            this._router.navigate(['/home']);
+        } else {
+            this._router.navigate(['/landing']);
+        }
     }
-  }
+}
+
+
+
+
 
   isHomeRoute(): boolean {
     return this._router.url === '/home';

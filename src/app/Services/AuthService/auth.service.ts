@@ -126,6 +126,13 @@ export class AuthService {
     // console.log('Cookie set:', cookieName);
   }
 
+  setCookieForForgotPassword(randomString:any) {
+    const expirationDate = new Date();
+    expirationDate.setTime(expirationDate.getTime() + (15 * 60 * 1000)); // 15 minutes in milliseconds
+    this._cookie.set(`${"ForgotPasswordToken"}`, randomString, expirationDate, '/', undefined, true, 'Strict');
+    console.log("cookie set: ", randomString);
+  }
+
   getCookie() {
     const cookieExists = this._cookie.check("userID");
     // console.log('Cookie exists:', cookieExists);
