@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { AuthService } from '../../../Services/AuthService/auth.service';
 import { Firestore, addDoc, collection, where } from '@angular/fire/firestore';
 import { query } from '@angular/animations';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-forgotpassword',
@@ -18,28 +19,24 @@ export class ForgotpasswordComponent {
   private _emailService = inject(EmailService);
   private _authService = inject(AuthService);
   private _firestore = inject(Firestore);
+  private _router = inject(Router);
 
   forgotPasswordForm = new FormGroup({
     email:new FormControl("", Validators.required)
   })
 
   sendEmail() {
-    this._emailService.verifyEmail(this.forgotPasswordForm.value.email).then((result) => {
-      let passwordToken = crypto.randomUUID();
+    this._emailService.verifyEmail(this.forgotPasswordForm.value.email).then(async(result) => {
+      await Swal.fire({
+        position: "center",
+        icon: "success",
+        title: `Password Recovery email sent to ${result["Email"]}`,
+        showConfirmButton: false,
+        timer: 1500
+      });
       if(result) {
-        this._emailService.send(result["Email"], passwordToken).then(async() => {
-          await Swal.fire({
-            position: "center",
-            icon: "success",
-            title: `Password Recovery email sent to ${result["Email"]}`,
-            showConfirmButton: false,
-            timer: 1500
-          });
-          const expiresAt = new Date();
-          expiresAt.setMinutes(expiresAt.getMinutes() + 10);
-          this.storeTokenInDB(result["userID"], passwordToken, expiresAt)
-        })
-
+        this._emailService.send(result["Email"])
+        this._router.navigate(['/RecoverAccount'])
 
       } else {
 
@@ -64,16 +61,6 @@ export class ForgotpasswordComponent {
     })
   }
 
-  storeTokenInDB(userID:any, token:any, expirationDate:any) {
-    let ref = collection(this._firestore, "ForgotPassword");
-    let obj = {
-      token:token,
-      userID:userID,
-      createdAt:new Date(),
-      expirationDate:expirationDate
-    }
-    return addDoc(ref ,obj)
-
-  }
+ 
 
 }

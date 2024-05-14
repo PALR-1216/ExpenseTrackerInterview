@@ -71,14 +71,14 @@ export class AppComponent implements OnInit{
     console.log('Current Route:', this._router.url);
 
     // Direct check for the /forgotPassword route
-    const isPasswordRecoveryRoute = this._router.url.startsWith('/forgotPassword');
+    const isPasswordRecoveryRoute = this._router.url.startsWith('/RecoverAccount');
     console.log('Is Password Recovery Route:', isPasswordRecoveryRoute);
 
     // Handling based on the route and authentication status
     if (isPasswordRecoveryRoute) {
         if (!this.isAuthenticated) {
             // Redirect to the password recovery component if not authenticated
-            this._router.navigate(['/password-recovery']);  // Assuming '/password-recovery' is your intended target
+            this._router.navigate(['/RecoverAccount']);  // Assuming '/password-recovery' is your intended target
         } else {
             // Redirect authenticated users away from the forgot password page (usually to the home page)
             this._router.navigate(['/home']);

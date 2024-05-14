@@ -15,11 +15,13 @@ import { ViewexpenseComponent } from './Components/Expenses/ViewExpense/viewexpe
 import { ForgotpasswordComponent } from './Components/ForgotPassword/forgotpassword/forgotpassword.component';
 import { SettingsComponent } from './Components/Settings/settings/settings.component';
 import { RecoveraccountComponent } from './Components/RecoverAccount/recoveraccount/recoveraccount.component';
+import { ResetpasswordComponent } from './Components/ResetPassword/resetpassword/resetpassword.component';
 
 export const routes: Routes = [
     {path:'landing', component:LandingComponent},
     {path: 'aboutUs', component:AboutusComponent},
     {path:"RecoverAccount", component:RecoveraccountComponent},
+    {path:'ResetPassword/:userID', component:ResetpasswordComponent},
     {path:'login', component:LoginComponent},
     {path:'forgotPassword', component:ForgotpasswordComponent},
     {path:'signup', component:SignupComponent},

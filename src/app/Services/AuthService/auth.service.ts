@@ -152,8 +152,16 @@ export class AuthService {
   }
 
 
-  getUserDetails() {
+  async getUserDetails(withID:any):Promise<any> {
     let userRef = collection(this._firestore, 'users')
+    let q = query(userRef, where("userID", "==", withID))
+    let snapshot = await getDocs(q);
+    if(!snapshot.empty) {
+      return snapshot.docs[0].data();
+    } else {
+      return null;
+    }
+
   }
 
   updateUserName(newUserName:string) {
